@@ -43,6 +43,10 @@ namespace DesafioFrete.Controllers
         [HttpPost]
         public async Task<ActionResult<Veiculo>> CreateVeiculo([FromBody] Veiculo veiculo)
         {
+            if(await _context.Veiculos.AnyAsync(v => v.Renavam.Equals(veiculo.Renavam)))
+            {
+                throw new Exception("Veículo já cadastrado!");
+            }
             _context.Veiculos.Add(veiculo);
             await _context.SaveChangesAsync();
 

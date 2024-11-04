@@ -43,6 +43,10 @@ namespace DesafioFrete.Controllers
         [HttpPost]
         public async Task<ActionResult<Usuario>> CreateUsuario([FromBody] Usuario usuario)
         {
+            if(await _context.Usuarios.AnyAsync(u => u.Email.Equals(usuario.Email)))
+            {
+                throw new Exception("Já existe uma conta com o email fornecido!");
+            }
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
