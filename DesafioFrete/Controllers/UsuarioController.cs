@@ -4,24 +4,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataContext;
 using DesafioFrete.Models;
+using DesafioFrete.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DesafioFrete.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
         private readonly FreteDatabaseContext _context;
 
-        public UsuarioController(FreteDatabaseContext context)
+        private readonly RoleService _roleService;
+
+        public UsuarioController(FreteDatabaseContext context, RoleService roleService)
         {
             _context = context;
+            _roleService = roleService;
         }
 
         // GET: api/usuario
         [HttpGet]
+        [Authorize(Roles = "RH")]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
             return await _context.Usuarios.ToListAsync();
@@ -41,11 +48,17 @@ namespace DesafioFrete.Controllers
 
         // POST: api/usuario
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<Usuario>> CreateUsuario([FromBody] Usuario usuario)
         {
             if(await _context.Usuarios.AnyAsync(u => u.Email.Equals(usuario.Email)))
             {
-                throw new Exception("Já existe uma conta com o email fornecido!");
+                return BadRequest("Já existe uma conta com o email fornecido!");
+            }
+
+            if(string.IsNullOrWhiteSpace(usuario.Role) || !_roleService.Roles.ContainsKey(usuario.Role))
+            {
+                return BadRequest("Role inválida ou não fornecida");
             }
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
@@ -55,6 +68,7 @@ namespace DesafioFrete.Controllers
 
         // PUT: api/usuario/{id}
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateUsuario(long id, [FromBody] Usuario usuario)
         {
             if (id != usuario.UsuarioId)
@@ -85,6 +99,7 @@ namespace DesafioFrete.Controllers
 
         // DELETE: api/usuario/{id}
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteUsuario(long id)
         {
             var usuario = await _context.Usuarios.FindAsync(id);

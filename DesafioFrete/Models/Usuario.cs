@@ -15,5 +15,7 @@ public partial class Usuario
 
     public string? Telefone { get; set; }
 
+    public string Role { get; set; }
+
     public virtual ICollection<Frete> Fretes { get; set; } = new List<Frete>();
 }

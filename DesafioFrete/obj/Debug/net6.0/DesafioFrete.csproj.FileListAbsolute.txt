@@ -81,3 +81,7 @@
 /home/italo/Documents/FreteCode/DesafioFrete/obj/Debug/net6.0/ref/DesafioFrete.dll
 /home/italo/Documents/FreteCode/DesafioFrete/obj/Debug/net6.0/DesafioFrete.pdb
 /home/italo/Documents/FreteCode/DesafioFrete/obj/Debug/net6.0/DesafioFrete.genruntimeconfig.cache
+/home/italo/Documents/FreteCode/DesafioFrete/bin/Debug/net6.0/JWT.dll
+/home/italo/Documents/FreteCode/DesafioFrete/bin/Debug/net6.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/italo/Documents/FreteCode/DesafioFrete/bin/Debug/net6.0/Newtonsoft.Json.dll
+/home/italo/Documents/FreteCode/DesafioFrete/bin/Debug/net6.0/config/json/RolePermissions.json
